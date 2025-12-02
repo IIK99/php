@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location:../login.php");
+    header("Location:login.php");
     exit();
 }
 ?>
@@ -79,7 +79,7 @@ if (!isset($_SESSION['username'])) {
     <div class="sidebar py-4">
         <a href="index.php">Dashboard</a>
         <a href="mahasiswa.php">Data Mahasiswa</a>
-        <a href="../login/logout.php">Logout</a>
+        <a href="login/logout.php">Logout</a>
     </div>
 
     <div class="main-content">

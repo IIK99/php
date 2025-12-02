@@ -9,11 +9,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tgl_lahir = $_POST['tgl_lahir'];
     $jurusan = $_POST['jurusan'];
     $alamat = $_POST['alamat'];
+    $foto = $_FILES['foto']['name'];
+    $tmp = $_FILES['foto']['tmp_name'];
+    $folder = "uploads/";
 
-    $query = "INSERT INTO tb_mhs (nim, nama, jk, tgl_lahir, jurusan, alamat) 
-              VALUES ('$nim', '$nama', '$jk', '$tgl_lahir', '$jurusan', '$alamat')";
+    $query = "INSERT INTO tb_mhs (nim, nama, jk, tgl_lahir, jurusan, alamat, foto) 
+              VALUES ('$nim', '$nama', '$jk', '$tgl_lahir', '$jurusan', '$alamat', '$foto')";
 
     if (mysqli_query($koneksi, $query)) {
+        move_uploaded_file($tmp, $folder . $foto);
         echo "<script>alert('Data berhasil ditambahkan'); window.location.href='mahasiswa.php';</script>";
     } else {
         echo "<script>alert('Data gagal ditambahkan'); window.location.href='tambah.php';</script>";
@@ -59,8 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 
                                 <div class="form-group">
                                     <label for="">Alamat</label>
-                                    <textarea name="alamat" id="alamat" class="form-control" placeholder="Masukan Alamat" cols="20" rows="8" required></textarea>
+                                    <textarea name="alamat" id="alamat" class="form-control" placeholder="Masukan Alamat" cols="20" rows="4" required></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="">Foto</label>
+                                    <input type="file" class="form-control" id="foto" name="foto" required>
+                                    <img id="preview" src="#" alt="Preview Gambar" style="display:none;" width="100px" />
                             </div>
                             <footer class="container-fluid">
                                 <button type="submit" class="btn btn-info btn-sm">Simpan</button>
@@ -71,4 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
+        <script>
+            document.getElementById('foto').onchange = function (evt) {
+                const [file] = this.files;
+                if (file) {
+                    const preview = document.getElementById('preview');
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            };
+        </script>
 <?php include 'partial/footer.php'; ?>

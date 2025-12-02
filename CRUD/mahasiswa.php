@@ -6,6 +6,7 @@
                         <h1 class="text-center">Data Mahasiswa</h1>
                         <div class="text-end">
                             <a href="tambah.php" class="btn btn-primary mb-4">Tambah Data</a>
+                            <a href="report.php" target="_blank" class="btn btn-danger mb-4">Report Pdf</a>
                         </div>
                     </header>
                     <table class="table table-bordered w-100" id="table_mhs">
@@ -18,6 +19,7 @@
                                 <th>Tanggal Lahir</th>
                                 <th>Jurusan</th>
                                 <th>Alamat</th>
+                                <th>Foto</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -36,11 +38,19 @@
                             echo "<td>" . $data['tgl_lahir'] . "</td>";
                             echo "<td>" . $data['jurusan'] . "</td>";
                             echo "<td>" . $data['alamat'] . "</td>";
+                        echo "<td>";
+                        if ($data['foto'] == '') {
+                            echo "<img src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flookaside.fbsbx.com%2Flookaside%2Fcrawler%2Fmedia%2F%3Fmedia_id%3D100090620670005&f=1&nofb=1&ipt=64b7f6ae457b2a3518a33e8c4edddd46ec7350fcd7683482493327d5bf5b21c8' width='50px' />";
+                        } else {
+                            echo "<img src='uploads/" . $data['foto'] . "' width='50px' />";
+                        }
+                        echo "</td>";
                             echo "<td>
                                     <a href='edit.php?nim=" . $data['nim'] . "' class='btn btn-warning btn-sm'>Edit</a>
                                     <a href='delete.php?nim=" . $data['nim'] . "' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah anda yakin menghapus data ini?')\">Hapus</a>
                                   </td>";
                             echo "</tr>";
+                            $no++;
                         }
                         ?>
                     </tbody>

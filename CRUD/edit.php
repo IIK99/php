@@ -31,15 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jurusan = mysqli_real_escape_string($koneksi, $_POST['jurusan']);
     $alamat = mysqli_real_escape_string($koneksi, $_POST['alamat']);
 
-    $queryUpdate = "UPDATE tb_mhs SET 
-                    nama='$nama',
-                    jk='$jk',
-                    tgl_lahir='$tgl_lahir',
-                    jurusan='$jurusan',
-                    alamat='$alamat'
-                    WHERE nim='$id'";
+    if (!empty($_FILES['foto']['name'])) {
+        $foto = $_FILES['foto']['name'];
+        $tmp = $_FILES['foto']['tmp_name'];
+        $folder = "uploads/";
 
-    if (mysqli_query($koneksi, $queryUpdate)) {
+        if (!file_exists($folder)) {
+            mkdir($folder, 0777, true);
+        }
+
+        move_uploaded_file($tmp, $folder.$foto);
+
+        $query = "UPDATE tb_mhs set nama='$nama', jk='$jk',tgl_lahir='$tgl_lahir', jurusan='$jurusan', alamat='$alamat', foto='$foto' where nim='$id'";
+    } else {
+        $query = "UPDATE tb_mhs set nama='$nama', jk='$jk',tgl_lahir='$tgl_lahir', jurusan='$jurusan', alamat='$alamat' where nim='$id'";
+    }
+
+    if (mysqli_query($koneksi, $query)) {
         echo "<script>alert('Data berhasil diupdate'); window.location.href='mahasiswa.php';</script>";
         exit;
     } else {
@@ -84,8 +92,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-group">
                             <label for="">Alamat</label>
-                            <textarea name="alamat" id="alamat" class="form-control" cols="20" rows="8" required><?= htmlspecialchars($data['alamat']); ?></textarea>
+                            <textarea name="alamat" id="alamat" class="form-control" cols="20" rows="4" required><?= htmlspecialchars($data['alamat']); ?></textarea>
                         </div>
+                        <div class="form-group"></div>
+                            <label for="">Foto</label>
+                            <input type="file" class="form-control" id="foto" name="foto">
+                            <br>
+                            <?php
+                            if ($data['foto'] != '') {
+                                echo "<br><img src='uploads/" . htmlspecialchars($data['foto']) . "' width='100px' />";
+                            } else {
+                                echo "<br><img src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flookaside.fbsbx.com%2Flookaside%2Fcrawler%2Fmedia%2F%3Fmedia_id%3D100090620670005&f=1&nofb=1&ipt=64b7f6ae457b2a3518a33e8c4edddd46ec7350fcd7683482493327d5bf5b21c8' width='100px' />";
+                            }
+                            ?>
                     </div>
                     <footer class="container-fluid">
                         <button type="submit" class="btn btn-info btn-sm">Ubah Data</button>
@@ -96,4 +115,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('foto').onchange = function (evt) {
+        const [file] = this.files;
+        if (file) {
+            const previewImg = document.getElementById('previewImg');
+            previewImg.style.display = 'block';
+            previewImg.src = URL.createObjectURL(file);
+        } else {
+            document.getElementById('previewImg').style.display = 'none';
+        }
+    };
+</script>
 <?php include 'partial/footer.php'; ?>
