@@ -79,6 +79,7 @@ if (!isset($_SESSION['username'])) {
     <div class="sidebar py-4">
         <a href="index.php">Dashboard</a>
         <a href="mahasiswa.php">Data Mahasiswa</a>
+        <a href="user.php">Data User</a>
         <a href="login/logout.php">Logout</a>
     </div>
 
