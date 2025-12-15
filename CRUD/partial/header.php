@@ -15,6 +15,7 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="assets/bootstrap.min.css">
     <link rel="stylesheet" href="assets/DataTables-1.13.3/css/jquery.dataTables.min.css">
     <script src="assets/jquery-3.6.1.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
     <script src="assets/DataTables-1.13.3/js/jquery.dataTables.min.js"></script>
 </head>
 <style>
